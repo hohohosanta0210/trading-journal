@@ -71,6 +71,10 @@ body {
 /* SVG 기본 — flex 안에서 폭 100%로 늘어나는 것 방지 */
 svg { display: block; width: 20px; height: 20px; flex-shrink: 0; }
 
+/* Focus (a11y) — visible outline restored for keyboard users only */
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.input:focus-visible, .select:focus-visible, .textarea:focus-visible { outline: none; }
+
 /* ========== Layout ========== */
 #app { min-height: 100vh; display: flex; flex-direction: column; }
 .app-header {
@@ -673,42 +677,33 @@ function toKRW(amount, currency, rate) {
 
 // ---------- 6. 샘플 데이터 ----------
 function getSampleTrades() {
+  const today = new Date();
+  const d = (offset) => {
+    const x = new Date(today);
+    x.setDate(x.getDate() + offset);
+    return x.toISOString().slice(0, 10);
+  };
   return [
     {
       id: uuid(),
       ticker: 'CRCA',
-      market: 'US',
-      type: 'leveraged_etf',
-      status: 'closed',
-      entryDate: '2025-05-14',
-      entryPrice: 48.0,
-      quantity: 100,
-      positionSizePercent: 20,
+      market: 'US', type: 'leveraged_etf', status: 'closed',
+      entryDate: d(-14), entryPrice: 48.0, quantity: 100, positionSizePercent: 20,
       entryReason: '스테이블코인 테마, 미국 부채 해결 서사',
-      stopLossPrice: null,
-      targetPrice: null,
-      exitRule: '',
-      exitDate: '2025-05-28',
-      exitPrice: 38.4,
+      stopLossPrice: null, targetPrice: null, exitRule: '',
+      exitDate: d(0), exitPrice: 38.4,
       exitReason: '변동성 끌림 인지, 손절',
-      emotionOnEntry: '확신',
-      emotionOnExit: '후회',
+      emotionOnEntry: '확신', emotionOnExit: '후회',
       lessonLearned: '1일 보유 목적 상품을 며칠씩 들고 있었음. 손절선 없이 강한 서사로 진입. 변동성 끌림으로 횡보장에서도 가치 감소.',
       createdAt: Date.now(),
     },
     {
       id: uuid(),
       ticker: 'TIGER 미국우주테크',
-      market: 'KR',
-      type: 'etf',
-      status: 'open',
-      entryDate: '2025-04-01',
-      entryPrice: 10000,
-      quantity: 200,
-      positionSizePercent: 40,
+      market: 'KR', type: 'etf', status: 'open',
+      entryDate: d(-30), entryPrice: 10000, quantity: 200, positionSizePercent: 40,
       entryReason: '그냥 가는 게 더 가길래 매수',
-      stopLossPrice: null,
-      targetPrice: null,
+      stopLossPrice: null, targetPrice: null,
       exitRule: '거래량 동반 5일선 이탈 OR 거래량 동반 역망치형 출현 OR 고점 대비 -7% OR 6월 10일 도달',
       currentPrice: 16000,
       emotionOnEntry: '계획적',
@@ -765,6 +760,12 @@ function closeModal(cb) {
   document.body.style.overflow = '';
   if (cb) cb();
 }
+// ESC key closes modal
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && document.getElementById('modal-root').children.length) {
+    closeModal();
+  }
+});
 
 // ---------- 10. 탭바 / 헤더 ----------
 function renderTabbar() {
