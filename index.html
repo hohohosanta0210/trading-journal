@@ -68,6 +68,9 @@ body {
 
 .mono { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-feature-settings: 'tnum' 1; }
 
+/* SVG 기본 — flex 안에서 폭 100%로 늘어나는 것 방지 */
+svg { display: block; width: 20px; height: 20px; flex-shrink: 0; }
+
 /* ========== Layout ========== */
 #app { min-height: 100vh; display: flex; flex-direction: column; }
 .app-header {
@@ -349,6 +352,7 @@ main {
   margin-top: 8px;
   display: flex; gap: 8px; align-items: flex-start;
 }
+.warn-banner svg { width: 16px; height: 16px; margin-top: 1px; }
 
 .info-banner {
   padding: 14px;
@@ -359,7 +363,7 @@ main {
   margin-bottom: 16px;
   display: flex; gap: 12px; align-items: flex-start;
 }
-.info-banner svg { color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+.info-banner svg { width: 20px; height: 20px; color: var(--accent); flex-shrink: 0; margin-top: 2px; }
 .info-banner .close-btn {
   margin-left: auto;
   color: var(--text-3);
@@ -439,6 +443,7 @@ main {
   color: var(--text-2);
   flex-shrink: 0;
 }
+.modal-header .close-btn svg { width: 18px; height: 18px; }
 .detail-section {
   padding: 14px 0;
   border-bottom: 1px solid var(--border);
@@ -470,6 +475,7 @@ main {
   margin: 0 auto 16px;
   color: var(--text-3);
 }
+.empty .icon-wrap svg { width: 28px; height: 28px; }
 .empty h3 { color: var(--text-1); font-size: 16px; margin-bottom: 6px; font-weight: 600; }
 .empty p { font-size: 13px; line-height: 1.6; }
 
